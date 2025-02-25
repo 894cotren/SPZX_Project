@@ -9,6 +9,7 @@
         <version>1.0.0</version>
     </parent>
 
+    <!--项目的后台管理微服务端-->
     <artifactId>spzx-manager</artifactId>
 
     <properties>
