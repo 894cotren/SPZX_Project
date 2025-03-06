@@ -8,5 +8,9 @@ public class LoginDto {
 
     private String userName ;
     private String password ;
+    //验证码
+    private String captcha ;
+    //验证码所协同的key
+    private String codeKey ;
 
 }

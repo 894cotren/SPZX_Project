@@ -8,12 +8,14 @@ import com.awc20.spzx.manager.service.SysUserService;
 import com.awc20.spzx.model.dto.system.LoginDto;
 import com.awc20.spzx.model.entity.system.SysUser;
 import com.awc20.spzx.model.vo.system.LoginVo;
+import com.awc20.spzx.model.vo.system.SysUserThreadLocalAuthContextUtil;
 import com.awc20.spzx.util.MyAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +32,14 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public LoginVo login(LoginDto loginDto) {
+        //校验验证码
+        String codeKey = loginDto.getCodeKey();
+        String captcha = loginDto.getCaptcha();
+        //从redis根据协同key拿到正确验证码
+        String captchaCode = redisTemplate.opsForValue().get(codeKey);
+        //对比验证码。
+        MyAssert.isTrue(StringUtils.hasText(captchaCode)&&captchaCode.equals(captcha),"验证码错误");
+
         String password = loginDto.getPassword();
         String userName = loginDto.getUserName();
         SysUser sysUser = sysUserMapper.selectSysUserByName(userName);
@@ -50,13 +60,16 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public SysUser getUserInfo(String token) {
-        //需要根据token去redis缓存里取出用户信息。
+/*        //需要根据token去redis缓存里取出用户信息。
         String sysUserJson = redisTemplate.opsForValue().get("user:login:"+token);
         if (sysUserJson.isEmpty()){
             return null;
         }
         //抓换用户信息为对象然后返回
-        SysUser sysUser = JSON.parseObject(sysUserJson, SysUser.class);
+        SysUser sysUser = JSON.parseObject(sysUserJson, SysUser.class);*/
+
+        //有了拦截器之后，我们直接用存入本地线程的数据吧。
+        SysUser sysUser = SysUserThreadLocalAuthContextUtil.get();
         return sysUser;
     }
 
