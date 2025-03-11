@@ -25,5 +25,18 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
+        <!-- minio客户端-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.2</version>
+        </dependency>
+
+        <!--日期类工具包-->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${jodatime.version}</version>
+        </dependency>
     </dependencies>
 </project>

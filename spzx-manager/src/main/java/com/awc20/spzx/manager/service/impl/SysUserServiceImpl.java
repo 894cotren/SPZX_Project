@@ -6,10 +6,13 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.awc20.spzx.manager.mapper.SysUserMapper;
 import com.awc20.spzx.manager.service.SysUserService;
 import com.awc20.spzx.model.dto.system.LoginDto;
+import com.awc20.spzx.model.dto.system.SysUserDto;
 import com.awc20.spzx.model.entity.system.SysUser;
 import com.awc20.spzx.model.vo.system.LoginVo;
 import com.awc20.spzx.model.vo.system.SysUserThreadLocalAuthContextUtil;
 import com.awc20.spzx.util.MyAssert;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -71,6 +74,32 @@ public class SysUserServiceImpl implements SysUserService {
         //有了拦截器之后，我们直接用存入本地线程的数据吧。
         SysUser sysUser = SysUserThreadLocalAuthContextUtil.get();
         return sysUser;
+    }
+
+    @Override
+    public PageInfo<SysUser> getSysUserListByPage(int pageNum, int pageSize, SysUserDto sysUserDto) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<SysUser> sysUserList = sysUserMapper.selectSysUserListByPage(sysUserDto);
+        PageInfo<SysUser> pageInfo = new PageInfo<>(sysUserList);
+        return pageInfo;
+    }
+
+    @Override
+    public void saveSysUser(SysUser sysUser) {
+        //这里不做用户、手机号等等不允许重复的逻辑校验。
+        //用户密码是明文，这里需要加密处理。
+        String password = sysUser.getPassword();
+        String md5InputPassword = DigestUtils.md5DigestAsHex(password.getBytes());
+        sysUser.setPassword(md5InputPassword);
+        //设置一下用户状态
+        sysUser.setStatus(1);
+        sysUserMapper.insertSysUser(sysUser);
+    }
+
+    @Override
+    public void updateSysUser(SysUser sysUser) {
+        //这里不做密码更改。
+        sysUserMapper.updateSysUser(sysUser);
     }
 
 

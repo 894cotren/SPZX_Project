@@ -8,6 +8,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/admin/system/sysRole/")
 @CrossOrigin(allowCredentials = "true" , originPatterns = "*" , allowedHeaders = "*")
@@ -40,5 +42,13 @@ public class SysRoleController {
         return Result.ok("修改成功");
     }
 
+
+    //分配角色功能，根据传入的用户ID，我们需要查询到所有角色数据，以及用户已关联上的角色ID。
+    //所以我们需要返回一个Map集合装两个list集合。一个list装所有角色数据，一个list装用户关联的角色ID
+    @GetMapping("/findAllRoles/{sysUserId}")
+    public Result<Map<String,Object>> findAllRoles(@PathVariable Long sysUserId){
+        Map<String,Object> roleMap = sysRoleService.findAllRoles(sysUserId);
+        return Result.ok(roleMap);
+    }
 
 }

@@ -11,4 +11,7 @@ public interface SysRoleMapper {
     void insertSysRole(SysRole sysRole);
 
     void updateSysRole(SysRole sysRole);
+
+    List<SysRole> findAllRoles();
+
 }

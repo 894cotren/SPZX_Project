@@ -6,8 +6,74 @@
     <sql id="columns">
         id,username userName ,password,name,phone,avatar,description,status,create_time,update_time,is_deleted
     </sql>
+    <insert id="insertSysUser">
+        insert into sys_user (
+            id,
+            username,
+            password,
+            name,
+            phone,
+            avatar,
+            description,
+            status
+        ) values (
+                     #{id},
+                     #{username},
+                     #{password},
+                     #{name},
+                     #{phone},
+                     #{avatar},
+                     #{description},
+                     #{status}
+                 )
+
+    </insert>
+    <update id="updateSysUser">
+        update sys_user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+<!--            <if test="password != null and password != ''">
+                password = #{password},
+            </if>-->
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            update_time =  now()
+        </set>
+        where
+        id = #{id}
+    </update>
 
     <select id="selectSysUserByName" resultType="com.awc20.spzx.model.entity.system.SysUser">
         select <include refid="columns"/>  from sys_user where username=#{userName} and is_deleted=0
+    </select>
+    <select id="selectSysUserListByPage" resultType="com.awc20.spzx.model.entity.system.SysUser">
+                select <include refid="columns"/> from sys_user
+                <where>
+                <if test="keyword != null and keyword!=''">
+                  (  name like concat('%',#{keyword},'%') or phone like concat('%',#{keyword},'%') or description like concat('%',#{keyword},'%') )and
+                </if>
+                <if test="createTimeBegin != null and createTimeBegin!=''">
+                    create_time &gt; #{createTimeBegin} and
+                </if>
+                <if test="createTimeEnd != null and createTimeEnd!=''">
+                    create_time &lt; #{createTimeEnd} and
+                </if>
+                 and is_deleted =0
+                </where>
     </select>
 </mapper>

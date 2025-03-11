@@ -3,17 +3,22 @@ package com.awc20.spzx.manager.controller;
 import cn.hutool.Hutool;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
+import com.awc20.spzx.manager.service.SysMenuService;
 import com.awc20.spzx.manager.service.SysUserService;
 import com.awc20.spzx.manager.service.ValidateCodeService;
 import com.awc20.spzx.model.dto.system.LoginDto;
+import com.awc20.spzx.model.entity.system.SysMenu;
 import com.awc20.spzx.model.entity.system.SysUser;
 import com.awc20.spzx.model.vo.common.Result;
 import com.awc20.spzx.model.vo.system.LoginVo;
+import com.awc20.spzx.model.vo.system.SysMenuVo;
 import com.awc20.spzx.model.vo.system.ValidateCodeVo;
 import com.awc20.spzx.util.MyAssert;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/system/index/")
@@ -25,6 +30,9 @@ public class IndexController {
 
     @Autowired
     private ValidateCodeService validateCodeService;
+
+    @Autowired
+    private SysMenuService sysMenuService;
 
     @PostMapping("/login")
     public Result<LoginVo> login(@RequestBody LoginDto loginDto) {
@@ -57,6 +65,14 @@ public class IndexController {
         System.out.println(code);
         System.out.println(imageBase64Data);
     }*/
+
+
+    //查询到当前用户特有的菜单。虽然没传入用户ID，但线程里有。
+    @GetMapping("/menus")
+    public Result<List<SysMenuVo>> menus(){
+        List<SysMenuVo> sysMenuVoList= sysMenuService.menus();
+        return Result.ok(sysMenuVoList);
+    }
 }
 
 

@@ -32,4 +32,7 @@
                 and is_deleted=0
         </where>
     </select>
+    <select id="findAllRoles" resultType="com.awc20.spzx.model.entity.system.SysRole">
+        select * from sys_role where is_deleted=0
+    </select>
 </mapper>
