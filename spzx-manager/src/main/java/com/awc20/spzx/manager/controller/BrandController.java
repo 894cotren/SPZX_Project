@@ -4,8 +4,11 @@ import com.awc20.spzx.manager.service.BrandService;
 import com.awc20.spzx.model.entity.product.Brand;
 import com.awc20.spzx.model.vo.common.Result;
 import com.github.pagehelper.PageInfo;
+import org.ehcache.spi.resilience.ResilienceStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/admin/product/brand")
 @RestController
@@ -32,6 +35,12 @@ public class BrandController {
     public Result updateById(@RequestBody Brand brand){
         brandService.updateById(brand);
         return Result.ok(null);
+    }
+
+    @GetMapping("/findAll")
+    public Result<List<Brand>> findAllBrand(){
+        List<Brand> list= brandService.findAllBrand();
+        return Result.ok(list);
     }
 
 

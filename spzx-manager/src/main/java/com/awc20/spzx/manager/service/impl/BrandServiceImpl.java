@@ -34,4 +34,10 @@ public class BrandServiceImpl implements BrandService {
     public void updateById(Brand brand) {
         brandMapper.updateById(brand);
     }
+
+    @Override
+    public List<Brand> findAllBrand() {
+        List<Brand> brandList = brandMapper.selectAllBrand();
+        return brandList;
+    }
 }

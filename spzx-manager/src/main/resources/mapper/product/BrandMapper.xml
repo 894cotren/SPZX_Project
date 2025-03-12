@@ -20,4 +20,7 @@
     <select id="selectBrandByPage" resultType="com.awc20.spzx.model.entity.product.Brand">
         select * from brand where is_deleted=0
     </select>
+    <select id="selectAllBrand" resultType="com.awc20.spzx.model.entity.product.Brand">
+        select * from brand where is_deleted=0
+    </select>
 </mapper>

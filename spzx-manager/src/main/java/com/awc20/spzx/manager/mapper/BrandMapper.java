@@ -10,4 +10,8 @@ public interface BrandMapper {
     void insertBrand(Brand brand);
 
     void updateById(Brand brand);
+
+    List<Brand> selectAllBrand();
+
+
 }
