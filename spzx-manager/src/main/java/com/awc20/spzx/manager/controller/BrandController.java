@@ -1,6 +1,5 @@
 package com.awc20.spzx.manager.controller;
 
-import com.awc20.spzx.common.log.annotation.MyLog;
 import com.awc20.spzx.manager.service.BrandService;
 import com.awc20.spzx.model.entity.product.Brand;
 import com.awc20.spzx.model.vo.common.Result;
